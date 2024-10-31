@@ -1,0 +1,25 @@
+{
+    "name": "condoedge/triggerator",
+    "description": "An observer events/triggers package for kompo/kompo",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Condoedge\\Triggerator\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.0",
+        "laravel/framework": ">=5.6.0",
+        "kompo/kompo": "^3.0",
+        "kompo/auth": ">=0.4.88"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Condoedge\\Triggerator\\TriggeratorServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
