@@ -1,12 +1,8 @@
 <?php
 
-namespace Condoedge\Communications;
+namespace Condoedge\Triggerator;
 
-use Condoedge\Communications\EventsHandling\CommunicationTriggeredListener;
-use Condoedge\Communications\EventsHandling\Contracts\CommunicableEvent;
-use Condoedge\Communications\Models\CommunicationTemplateGroup;
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class TriggeratorServiceProvider extends ServiceProvider
@@ -28,16 +24,14 @@ class TriggeratorServiceProvider extends ServiceProvider
 
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'condoedge-comms');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'triggerator');
 
-        //Usage: php artisan vendor:publish --tag="condoedge-communications-config"
+        //Usage: php artisan vendor:publish --tag="triggerator-config"
         $this->publishes([
-            __DIR__.'/../config/kompo-communications.php' => config_path('kompo-communications.php'),
-        ], 'condoedge-communications-config');
+            __DIR__.'/../config/triggerator.php' => config_path('triggerator.php'),
+        ], 'triggerator-config');
 
         $this->loadConfig();
-
-        $this->loadListeners();
 
         $this->loadCrons();
     }
@@ -71,7 +65,7 @@ class TriggeratorServiceProvider extends ServiceProvider
     protected function loadConfig()
     {
         $dirs = [
-            'kompo-communications' => __DIR__.'/../config/kompo-communications.php',
+            'triggerator' => __DIR__.'/../config/triggerator.php',
         ];
 
         foreach ($dirs as $key => $path) {
@@ -79,34 +73,8 @@ class TriggeratorServiceProvider extends ServiceProvider
         }
     }
 
-    /**
-     * Loads the listeners.
-     */
-    protected function loadListeners()
-    {
-        $this->verifyCommunicationTriggers();
-        
-        Event::listen(CommunicationTemplateGroup::getTriggers(), CommunicationTriggeredListener::class);
-    }
-
-    protected function verifyCommunicationTriggers()
-    {
-        $triggers = CommunicationTemplateGroup::getTriggers();
-
-        foreach ($triggers as $trigger) {
-            if (!class_exists($trigger)) {
-                throw new \Exception("The trigger class $trigger does not exist.");
-            }
-
-            if (!in_array(CommunicableEvent::class, class_implements($trigger))) {
-                throw new \Exception("The trigger class $trigger must implement ".CommunicableEvent::class);
-            }
-        }
-    }
-
     protected function loadCrons()
     {
-        // TODO WE SHOULD REMOVE OLD VOID GROUP TEMPLATES 
         $schedule = $this->app->make(Schedule::class);
     }
 }
