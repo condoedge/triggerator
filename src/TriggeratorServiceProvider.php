@@ -2,8 +2,16 @@
 
 namespace Condoedge\Triggerator;
 
-use Illuminate\Console\Scheduling\Schedule;
+use Condoedge\Triggerator\Facades\Actions;
+use Condoedge\Triggerator\Facades\Triggers;
+use Condoedge\Triggerator\Services\ActionsManager;
+use Condoedge\Triggerator\Services\TriggersManager;
+use Condoedge\Triggerator\Triggers\Contracts\TriggerContract;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\Event;
 
 class TriggeratorServiceProvider extends ServiceProvider
 {
@@ -33,7 +41,12 @@ class TriggeratorServiceProvider extends ServiceProvider
 
         $this->loadConfig();
 
+        $this->loadListeners();
+
         $this->loadCrons();
+
+        Actions::setActions(config('triggerator.actions'));
+        Triggers::setTriggers(config('triggerator.triggers'));
     }
 
     /**
@@ -45,7 +58,27 @@ class TriggeratorServiceProvider extends ServiceProvider
     {
         //Best way to load routes. This ensures loading at the very end (after fortifies' routes for ex.)
         $this->booted(function () {
-            \Route::middleware('web')->group(__DIR__.'/../routes/web.php');
+            Route::middleware('web')->group(__DIR__.'/../routes/web.php');
+        });
+
+        $this->app->singleton('actions-manager', function () {
+            return new ActionsManager();
+        });
+
+        $this->app->singleton('triggers-manager', function () {
+            return new TriggersManager();
+        });
+
+        $this->app->bind('action-model', function () {
+            return new (config('triggerator.models.action'))();
+        });
+        
+        $this->app->bind('trigger-model', function () {
+            return new (config('triggerator.models.trigger'))();
+        });
+        
+        $this->app->bind('trigger-execution-model', function () {
+            return new (config('triggerator.models.trigger-execution'))();
         });
     }
 
@@ -53,7 +86,7 @@ class TriggeratorServiceProvider extends ServiceProvider
     {
         $helpersDir = __DIR__.'/Helpers';
 
-        $autoloadedHelpers = collect(\File::allFiles($helpersDir))->map(fn($file) => $file->getRealPath());
+        $autoloadedHelpers = collect(File::allFiles($helpersDir))->map(fn($file) => $file->getRealPath());
 
         $autoloadedHelpers->each(function ($path) {
             if (file_exists($path)) {
@@ -76,5 +109,10 @@ class TriggeratorServiceProvider extends ServiceProvider
     protected function loadCrons()
     {
         $schedule = $this->app->make(Schedule::class);
+    }
+
+    protected function loadListeners()
+    {
+        Event::listen(TriggerContract::class, \Condoedge\Triggerator\Listeners\TriggerListener::class);
     }
 }
