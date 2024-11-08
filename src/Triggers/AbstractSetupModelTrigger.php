@@ -41,7 +41,7 @@ abstract class AbstractSetupModelTrigger implements TriggerContract
     protected static function delayInputs()
     {
         return [
-            _Input('translate.delay')->type('number')->default(0)->name('delay'),
+            _Input('triggerator.delay')->type('number')->default(0)->name('delay'),
         ];
     }
 

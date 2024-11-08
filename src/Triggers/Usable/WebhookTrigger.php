@@ -8,14 +8,14 @@ class WebhookTrigger extends AbstractSetupModelTrigger
 {
     static function getName()
     {
-        return __('translate.webhook-trigger-name');
+        return __('triggerator.webhook-trigger-name');
     }
 
     static function getForm(array $params = [])
     {
         return _Rows(
-            _Input('translate.route')->name('route', false)->default($params['route'] ?? ''),
-            _Select('translate.method')->name('method', false)
+            _Input('triggerator.route')->name('route', false)->default($params['route'] ?? ''),
+            _Select('triggerator.method')->name('method', false)
                 ->options(collect(static::httpMethods())->mapWithKeys(fn ($method) => [$method => $method]))
                 ->default($params['method'] ?? 'GET'),
         );

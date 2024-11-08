@@ -15,16 +15,16 @@ enum ExecutionStatusEnum: int
     public function label()
     {
         return match ($this) {
-            self::PENDING => __('translate.pending'),
-            self::EXECUTED => __('translate.executed'),
-            self::CANCELED => __('translate.canceled'),
+            self::PENDING => __('triggerator.pending'),
+            self::EXECUTED => __('triggerator.executed'),
+            self::CANCELED => __('triggerator.canceled'),
         };
     }
 
     public function classes() {
         return match ($this) {
             self::PENDING => 'bg-warning',
-            self::EXECUTED => 'bg-info',
+            self::EXECUTED => 'bg-positive',
             self::CANCELED => 'bg-danger',
         };
     }

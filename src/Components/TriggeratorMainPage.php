@@ -11,13 +11,13 @@ class TriggeratorMainPage extends Form
         return _ResponsiveTabs([
             _Tab(
                 new TriggeratorDashboard()
-            )->label('translate.main-page'),
+            )->label('triggerator.main-page'),
             _Tab(
                 new TriggerSetupsTable()
-            )->label('translate.triggers'),
+            )->label('triggerator.triggers'),
             _Tab(
                 new TriggerExecutions()
-            )->label('translate.trigger-executions'),
+            )->label('triggerator.trigger-executions'),
         ], tabsCommonClass: 'mb-4 mr-6 ', tabsSelectedClass: 'border-b-2 pb-2 border-level1 font-semibold');
     }    
 }

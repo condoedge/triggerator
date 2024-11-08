@@ -9,7 +9,7 @@ use Kompo\Auth\Common\Modal;
 
 class ActionSetupForm extends Modal
 {
-    protected $_Title = 'translate.create-action';
+    protected $_Title = 'triggerator.create-action';
     public $model = ActionSetupModel::class;
 
     protected $triggerId;
@@ -26,7 +26,7 @@ class ActionSetupForm extends Modal
         $validators = $this->model->action->integrityValidators();
 
         if (Validator::make(request()->all(), $validators)->fails()) {
-            abort(403, __('translate.invalid-parameters'));
+            abort(403, __('triggerator.invalid-parameters'));
         }
 
         $this->model->action_params = request()->except(['action_namespace']);
@@ -42,7 +42,7 @@ class ActionSetupForm extends Modal
         });
 
         return _Rows(
-            _Select('translate.select-action')->options($parsedActions)->name('action_namespace')
+            _Select('triggerator.select-action')->options($parsedActions)->name('action_namespace')
                 ->selfGet('getActionForm')->inPanel('action-form')
                 ->required(),
 

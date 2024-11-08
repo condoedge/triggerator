@@ -55,17 +55,17 @@ class TriggerSetupFormPage extends Form
 
         return _Rows(
             _FlexBetween(
-                _Html('translate.create-trigger')->class('text-xl'),
+                _Html('triggerator.create-trigger')->class('text-xl'),
                 _SubmitButton('generic.save'),
             )->class('mb-2'),
 
-            _Input('translate.name')->name('name')->class('mb-4'),
+            _Input('triggerator.name')->name('name')->class('mb-4'),
 
             _Columns(
                 _Rows(
-                    _Html('translate.triggers')->class('text-xl mb-6'),
+                    _Html('triggerator.triggers')->class('text-xl mb-6'),
 
-                    _Select('translate.select-trigger')->options($parsedTriggers)->name('trigger_namespace')->required()
+                    _Select('triggerator.select-trigger')->options($parsedTriggers)->name('trigger_namespace')->required()
                         ->onChange(fn($e) => $e->selfGet('getTriggerForm')->inPanel('trigger-form'),
                     ),
 
@@ -75,9 +75,9 @@ class TriggerSetupFormPage extends Form
                 ),
 
                 _Rows(
-                    _Html('translate.actions')->class('text-xl mb-6'),
+                    _Html('triggerator.actions')->class('text-xl mb-6'),
 
-                    !$this->model->id ? _Html('translate.save-the-trigger-first')->class('text-xl') : 
+                    !$this->model->id ? _Html('triggerator.save-trigger-first')->class('text-xl') : 
                         _Rows(
                             new ActionSetupsTable([
                                 'trigger_id' => $this->model->id,

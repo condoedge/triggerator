@@ -11,7 +11,7 @@ class TriggerExecutions extends Table
     public function top()
     {
         return _FlexBetween(
-            _Html('translate.triggers-executions')->class('text-2xl'),
+            _Html('triggerator.triggers-executions')->class('text-2xl'),
             _MultiSelect()->options(ExecutionStatusEnum::optionsWithLabels())->class('!mb-0')
                 ->default([ExecutionStatusEnum::PENDING->value, ExecutionStatusEnum::EXECUTED->value])
                 ->name('status', false)->filter(),
@@ -26,9 +26,9 @@ class TriggerExecutions extends Table
     public function headers()
     {
         return [
-            _Th('translate.trigger-name'),
-            _Th('translate.status'),
-            _Th('translate.time-to-execute'),
+            _Th('triggerator.trigger-name'),
+            _Th('triggerator.status'),
+            _Th('triggerator.time-to-execute'),
         ];
     }
 

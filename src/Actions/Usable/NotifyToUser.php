@@ -18,15 +18,15 @@ class NotifyToUser extends AbstractAction
 
     public static function getName()
     {
-        return __('translate.notify-to-user');
+        return __('triggerator.notification-to-user');
     }
 
     static function getForm(array $params)
     {
         return _Rows(
-            _Input('translate.email')->name('email', false)->default($params['email'] ?? ''),
-            _Input('translate.subject')->name('subject', false)->default($params['subject'] ?? ''),
-            _Textarea('translate.message')->name('message', false)->default($params['message'] ?? ''),
+            _Input('triggerator.email')->name('email', false)->default($params['email'] ?? ''),
+            _Input('triggerator.subject')->name('subject', false)->default($params['subject'] ?? ''),
+            _Textarea('triggerator.message')->name('message', false)->default($params['message'] ?? ''),
         );
     }
 

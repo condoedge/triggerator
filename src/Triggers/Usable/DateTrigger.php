@@ -31,7 +31,7 @@ class DateTrigger extends AbstractSetupModelTrigger
 
     static function getName()
     {
-        return __('translate.date-trigger-name');
+        return __('triggerator.date-trigger-name');
     }
 
     public static function integrityValidators()

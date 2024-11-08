@@ -13,13 +13,13 @@ class SaveTrigger extends AbstractSetupModelTrigger
 {
     static function getName()
     {
-        return __('translate.save-trigger-name');
+        return __('triggerator.save-trigger-name');
     }
 
     static function getForm(array $params = [])
     {
         return _Rows(
-            _Select('translate.model')->name('model', false)
+            _Select('triggerator.model')->name('model', false)
                 ->options(collect(static::models())->mapWithKeys(fn ($model) => [$model => $model]))
                 ->default($params['model'] ?? ''),
         );

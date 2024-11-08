@@ -9,8 +9,8 @@ class TriggerSetupsTable extends Table
     public function top()
     {
         return _FlexBetween(
-            _Html('translate.triggers')->class('text-2xl'),
-            _LinkButton('translate.create-trigger')->href('triggerator.form'),
+            _Html('triggerator.triggers')->class('text-2xl'),
+            _LinkButton('triggerator.create-trigger')->href('triggerator.form'),
         );
     }
 
@@ -22,11 +22,11 @@ class TriggerSetupsTable extends Table
     public function headers()
     {
         return [
-            _Th('translate.trigger-name'),
-            _Th('translate.trigger-namespace'),
-            _Th('translate.trigger-params'),
-            _Th('translate.count-of-actions'),
-            _Th('translate.delay'),
+            _Th('triggerator.trigger-name'),
+            _Th('triggerator.trigger-namespace'),
+            _Th('triggerator.trigger-params'),
+            _Th('triggerator.count-of-actions'),
+            _Th('triggerator.delay'),
             _Th('')->class('w-8')
         ];
     }
