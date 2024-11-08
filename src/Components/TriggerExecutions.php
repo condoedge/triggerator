@@ -35,7 +35,7 @@ class TriggerExecutions extends Table
     public function render($execution)
     {
         return _TableRow(
-            _Html($execution->trigger->name),
+            _Html($execution->triggerSetup->name),
             $execution->statusPill(),
             _Html($execution->time_to_execute->format('Y-m-d H:i')),
         );

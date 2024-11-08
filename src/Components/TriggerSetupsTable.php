@@ -1,10 +1,10 @@
 <?php
 namespace Condoedge\Triggerator\Components;
 
-use Condoedge\Triggerator\Facades\Models\TriggerModel;
+use Condoedge\Triggerator\Facades\Models\TriggerSetupModel;
 use Kompo\Auth\Common\Table;
 
-class TriggersTable extends Table
+class TriggerSetupsTable extends Table
 {
     public function top()
     {
@@ -16,7 +16,7 @@ class TriggersTable extends Table
 
     public function query()
     {
-        return TriggerModel::query();
+        return TriggerSetupModel::query();
     }
 
     public function headers()
@@ -31,23 +31,23 @@ class TriggersTable extends Table
         ];
     }
 
-    public function render($trigger)
+    public function render($triggerSetup)
     {
         return _TableRow(
-            _Html($trigger->name),
-            _Html($trigger->trigger::getName()),
+            _Html($triggerSetup->name),
+            _Html($triggerSetup->trigger->getName()),
             _Rows(
-                collect($trigger->trigger_params)->map(function ($value, $key) {
+                collect($triggerSetup->trigger_params)->map(function ($value, $key) {
                     return _Html($key . ': ' . $value);
                 }),
             ),
 
-            _Html($trigger->actions()->count()),
+            _Html($triggerSetup->actions()->count()),
 
-            _Html($trigger->trigger->showDelay ? $trigger->delay : '-'),
+            _Html($triggerSetup->trigger->showDelay ? $triggerSetup->delay : '-'),
 
-            _Delete($trigger)->class('hover:text-red-600'),
-        )->href('triggerator.form', ['id' => $trigger->id]);
+            _Delete($triggerSetup)->class('hover:text-red-600'),
+        )->href('triggerator.form', ['id' => $triggerSetup->id]);
     }
     
 }

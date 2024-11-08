@@ -6,21 +6,14 @@ use Condoedge\Triggerator\Actions\Contract\ActionContract;
 
 abstract class AbstractAction implements ActionContract
 {
-    protected $action;
-    
-    public function __construct($action)
-    {
-        $this->action = $action;
-    }
+    abstract public static function execute(array $params);
 
-    abstract public function execute(object $params);
-
-    function getForm()
+    static function getForm(array $params)
     {
         return _Rows();
     }
 
-    public function integrityValidators()
+    public static function integrityValidators()
     {
         return [];
     }

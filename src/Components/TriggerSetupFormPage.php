@@ -2,26 +2,29 @@
 
 namespace Condoedge\Triggerator\Components;
 
-use Condoedge\Triggerator\Facades\Models\TriggerModel;
+use Condoedge\Triggerator\Facades\Models\TriggerSetupModel;
 use Condoedge\Triggerator\Facades\Triggers;
-use Condoedge\Triggerator\Models\Trigger;
+use Condoedge\Triggerator\Models\TriggerSetup;
 use Illuminate\Support\Facades\Validator;
 use Kompo\Auth\Common\Form;
+use Kompo\Komponents\Form\FormDisplayer;
 
-class TriggerFormPage extends Form
+class TriggerSetupFormPage extends Form
 {
     /**
-     * @var Trigger $model
+     * @var TriggerSetup $model
      */
-    public $model = TriggerModel::class;
+    public $model = TriggerSetupModel::class;
     public $refreshAfterSubmit = true;
 
     public function beforeSave()
     {
         $validators = $this->model->trigger->integrityValidators();
 
-        if (Validator::make(request()->all(), $validators)->fails()) {
-            abort(403, __('translate.invalid-parameters'));
+        $validation = Validator::make(request()->all(), $validators);
+
+        if ($validation->fails()) {
+            throw \Illuminate\Validation\ValidationException::withMessages($validation->errors()->toArray());
         }
 
         $this->model->trigger_params = request()->except(['name', 'trigger_namespace']);
@@ -29,7 +32,9 @@ class TriggerFormPage extends Form
 
     public function afterSave()
     {
-        $this->model->trigger->afterSetup($this->model);
+        $this->model->trigger->afterSetup(['trigger' => $this->model]);
+
+        cache()->forget(TriggerSetup::getCacheKey($this->model->trigger_namespace));
     }
 
     public function response()
@@ -37,6 +42,8 @@ class TriggerFormPage extends Form
         if($this->model->actions()->count()) {
             return redirect()->route('triggerator.dashboard', ['tab_number' => 1]);
         }
+
+        return response()->json(FormDisplayer::displayElements($this), 202);
     }
     
     public function render()
@@ -63,7 +70,7 @@ class TriggerFormPage extends Form
                     ),
 
                     _Panel(
-                        $this->model?->trigger?->getForm(),
+                        $this->model?->trigger?->getForm((array) $this->model->trigger_params ?? []),
                     )->id('trigger-form'),
                 ),
 
@@ -72,7 +79,7 @@ class TriggerFormPage extends Form
 
                     !$this->model->id ? _Html('translate.save-the-trigger-first')->class('text-xl') : 
                         _Rows(
-                            new ActionsTable([
+                            new ActionSetupsTable([
                                 'trigger_id' => $this->model->id,
                             ]),
                         ),
@@ -83,8 +90,8 @@ class TriggerFormPage extends Form
 
     public function getTriggerForm()
     {
-        $trigger = new (request('trigger_namespace'))($this->model);
+        if(!request('trigger_namespace')) return null;
 
-        return $trigger->getForm();
+        return request('trigger_namespace')::getForm([]);
     }
 }

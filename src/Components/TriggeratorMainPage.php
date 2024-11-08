@@ -13,7 +13,7 @@ class TriggeratorMainPage extends Form
                 new TriggeratorDashboard()
             )->label('translate.main-page'),
             _Tab(
-                new TriggersTable()
+                new TriggerSetupsTable()
             )->label('translate.triggers'),
             _Tab(
                 new TriggerExecutions()

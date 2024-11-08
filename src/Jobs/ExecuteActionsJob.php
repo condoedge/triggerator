@@ -3,7 +3,7 @@
 namespace Condoedge\Triggerator\Jobs;
 
 use Condoedge\Triggerator\Facades\Models\TriggerExecutionModel;
-use Condoedge\Triggerator\Facades\Models\TriggerModel;
+use Condoedge\Triggerator\Facades\Models\TriggerSetupModel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -26,7 +26,7 @@ class ExecuteActionsJob implements ShouldQueue
 
     public function handle()
     {
-        $trigger = TriggerModel::findOrFail($this->triggerId);
+        $trigger = TriggerSetupModel::findOrFail($this->triggerId);
         $execution = TriggerExecutionModel::findOrFail($this->executionId);
 
         $trigger->executeActions();

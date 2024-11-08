@@ -2,26 +2,41 @@
 
 namespace Condoedge\Triggerator\Triggers\Usable;
 
-use Condoedge\Triggerator\Models\Trigger;
-use Condoedge\Triggerator\Triggers\AbstractTrigger;
-use Illuminate\Support\Facades\Route;
+use Condoedge\Triggerator\Triggers\AbstractSetupModelTrigger;
 
-class WebhookTrigger extends AbstractTrigger
+class WebhookTrigger extends AbstractSetupModelTrigger
 {
-    static function setAllRoutes()
-    {
-        Trigger::setupForType(static::class, function ($trigger) {
-            $route = $trigger->trigger_params->route;
-            $method = $trigger->trigger_params->method;
-
-            Route::{$method}($route, function () use ($trigger) {
-                static::launch($trigger);
-            });
-        });
-    }
-
     static function getName()
     {
         return __('translate.webhook-trigger-name');
+    }
+
+    static function getForm(array $params = [])
+    {
+        return _Rows(
+            _Input('translate.route')->name('route', false)->default($params['route'] ?? ''),
+            _Select('translate.method')->name('method', false)
+                ->options(collect(static::httpMethods())->mapWithKeys(fn ($method) => [$method => $method]))
+                ->default($params['method'] ?? 'GET'),
+        );
+    }
+
+    protected static function httpMethods()
+    {
+        return [
+            'GET',
+            'POST',
+            'PUT',
+            'PATCH',
+            'DELETE',
+        ];
+    }
+
+    public static function integrityValidators()
+    {
+        return [
+            'route' => 'required|string|regex:/^[a-zA-Z0-9-_\/]+$/',
+            'method' => 'required|string|in:' . implode(',', static::httpMethods()),
+        ];
     }
 }

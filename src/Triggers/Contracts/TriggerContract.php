@@ -2,19 +2,18 @@
 
 namespace Condoedge\Triggerator\Triggers\Contracts;
 
-use Condoedge\Triggerator\Models\Trigger;
-
 interface TriggerContract
 {
-    /**
-     * Getting the instance of the trigger model
-     * @return Trigger|null
-     */
-    public function getTrigger();
+    public static function launch(array $params);
 
-    public function getParams();
+    public static function possibleActions();
 
-    public static function afterSetup($trigger, $params = []);
+    public static function getName();
 
-    static function launch($trigger, $params = []);
+    // FORMS
+    public static function getForm(array $params);
+
+    public static function integrityValidators();
+
+    public static function afterSetup(array $params);
 }

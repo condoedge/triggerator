@@ -3,27 +3,30 @@
 namespace Condoedge\Triggerator\Models;
 
 use Condoedge\Triggerator\Actions\Contract\ActionContract;
-use Condoedge\Triggerator\Facades\Models\TriggerModel;
+use Condoedge\Triggerator\Facades\Models\TriggerSetupModel;
 use Kompo\Auth\Models\Model;
 
-class Action extends Model
+class ActionSetup extends Model
 {
     protected $casts = [
         'action_params' => 'object',
     ];
 
+    // RELATIONSHIPS
     public function trigger()
     {related: 
-        return $this->belongsTo(TriggerModel::getClass());
+        return $this->belongsTo(TriggerSetupModel::getClass());
     }
 
-    public function getActionAttribute(): ?ActionContract
+    // ATTRIBUTES
+    public function getActionAttribute()
     {
         if(!$this->action_namespace || !class_exists($this->action_namespace)) return null;
 
-        return (new ($this->action_namespace)($this));
+        return new $this->action_namespace;
     }
 
+    // ACTIONS
     public function execute($params)
     {
         return $this->action?->execute($params);

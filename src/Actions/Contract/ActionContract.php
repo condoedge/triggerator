@@ -4,7 +4,12 @@ namespace Condoedge\Triggerator\Actions\Contract;
 
 interface ActionContract 
 {
-    public function execute(object $params);
+    public static function execute(array $params);
 
     public static function getName();
+
+    // FORM
+    public static function getForm(array $params);
+
+    public static function integrityValidators();
 }

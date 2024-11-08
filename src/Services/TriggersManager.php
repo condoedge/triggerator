@@ -29,7 +29,7 @@ class TriggersManager
     public function bindTriggersWithRightActions($triggers)
     {
         collect(value: $triggers)->each(function ($trigger) {
-            $this->actionBindings[$trigger] =$trigger::possibleActions();
+            $this->actionBindings[$trigger] = $trigger::possibleActions();
         });
     }
 

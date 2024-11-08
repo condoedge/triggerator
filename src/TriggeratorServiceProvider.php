@@ -113,6 +113,6 @@ class TriggeratorServiceProvider extends ServiceProvider
 
     protected function loadListeners()
     {
-        Event::listen(TriggerContract::class, \Condoedge\Triggerator\Listeners\TriggerListener::class);
+        
     }
 }

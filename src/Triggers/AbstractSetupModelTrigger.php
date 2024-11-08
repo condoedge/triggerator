@@ -3,62 +3,49 @@
 namespace Condoedge\Triggerator\Triggers;
 
 use Condoedge\Triggerator\Facades\Actions;
+use Condoedge\Triggerator\Models\TriggerSetup;
 use Condoedge\Triggerator\Triggers\Contracts\TriggerContract;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-abstract class AbstractTrigger implements TriggerContract
+abstract class AbstractSetupModelTrigger implements TriggerContract
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    protected $trigger;
-    protected $params;
     public $showDelay = true;
 
-    public function __construct($trigger, $params = [])
-    {
-        $this->trigger = $trigger;
-        $this->params = $params;
-    }
-
-    public function getTrigger()
-    {
-        return $this->trigger;
-    }
-
-    public function getParams()
-    {
-        return (object) array_merge((array) $this->getTrigger()->trigger_params, (array) $this->params);
-    }
-
-    public static function afterSetup($trigger, $params = [])
+    public static function afterSetup(array $params = [])
     {
         return null;
     }
 
-    static function launch($trigger, $params = [])
+    static function launch(array $params = [])
     {
-        event(new static($trigger, $params));
+        /**
+         * @var TriggerSetup $trigger
+         */
+        $trigger = objectFromArray($params)->trigger;
+
+        $trigger->execute($params);
     }
 
     abstract static function getName();
 
-    function getForm()
+    static function getForm(array $params = [])
     {
         return _Rows(
-            $this->delayInputs(),
+            self::delayInputs(),
         );
     }
 
-    protected function delayInputs()
+    protected static function delayInputs()
     {
         return [
             _Input('translate.delay')->type('number')->default(0)->name('delay'),
         ];
     }
 
-    public function integrityValidators()
+    public static function integrityValidators()
     {
         return [];
     }

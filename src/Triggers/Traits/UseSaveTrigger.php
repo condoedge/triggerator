@@ -1,25 +1,19 @@
 <?php
 
-namespace Condoedge\Triggerator\Actions\Usable\Traits;
+namespace Condoedge\Triggerator\Triggers\Traits;
 
-use Condoedge\Triggerator\Models\Trigger;
+use Condoedge\Triggerator\Facades\Models\TriggerSetupModel;
 use Condoedge\Triggerator\Triggers\Usable\SaveTrigger;
 
 trait UseSaveTrigger
 {
-    public function booted()
+    public static function booted()
     {
-        static::saving(function ($model) {
-            Trigger::setupForType(static::class, function ($trigger) use ($model) {
-                SaveTrigger::launch($trigger, ['model' => $model]);
-            });
+        static::saving(function () {
+            TriggerSetupModel::forTrigger(SaveTrigger::class)
+                ->whereRaw('JSON_CONTAINS(`trigger_params`,' . static::class . ', "$.model")')
+                ->get()
+                ->each(fn($t) => SaveTrigger::launch(['trigger' => $t]));
         });
-    }
-
-    public function possibleActions()
-    {
-        return [
-
-        ];
     }
 }

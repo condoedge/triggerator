@@ -1,21 +1,23 @@
 <?php
 namespace Condoedge\Triggerator\Triggers\Usable;
 
-use Condoedge\Triggerator\Triggers\AbstractTrigger;
+use Condoedge\Triggerator\Triggers\AbstractSetupModelTrigger;
 
-class DateTrigger extends AbstractTrigger
+class DateTrigger extends AbstractSetupModelTrigger
 {
     public $showDelay = false;
 
-    public function getForm()
+    public static function getForm(array $params = [])
     {
         return _Rows(
-            _DateTime()->name('date', false)->default($this->trigger?->trigger_params?->date),
+            _DateTime()->name('date', false)->default($params['date'] ?? ''),
         );
     }
 
-    static function afterSetup($triggerModel, $params = [])
+    static function afterSetup(array $params = [])
     {
+        $triggerModel = $params['trigger'] ?? null;
+
         $timeToTrigger = now()->diffInSeconds($triggerModel->trigger_params->date);
 
         $triggerModel->delay = $timeToTrigger;
@@ -24,7 +26,7 @@ class DateTrigger extends AbstractTrigger
 
         $triggerModel->executions()->pending()->delete();
 
-        static::launch($triggerModel);
+        static::launch(['trigger' => $triggerModel]);
     }
 
     static function getName()
@@ -32,7 +34,7 @@ class DateTrigger extends AbstractTrigger
         return __('translate.date-trigger-name');
     }
 
-    public function integrityValidators()
+    public static function integrityValidators()
     {
         return [
             'date' => 'required|date|after:today',

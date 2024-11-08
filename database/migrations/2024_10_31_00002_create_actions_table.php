@@ -10,10 +10,10 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('actions', function (Blueprint $table) {
+        Schema::create('action_setups', function (Blueprint $table) {
             addMetaData($table);
 
-            $table->foreignId('trigger_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('trigger_setup_id')->constrained()->cascadeOnDelete();
 
             $table->string('action_namespace');
             

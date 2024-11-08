@@ -1,10 +1,10 @@
 <?php
 namespace Condoedge\Triggerator\Components;
 
-use Condoedge\Triggerator\Facades\Models\TriggerModel;
+use Condoedge\Triggerator\Facades\Models\TriggerSetupModel;
 use Kompo\Auth\Common\Table;
 
-class ActionsTable extends Table
+class ActionSetupsTable extends Table
 {
     public $id = 'actions-table';
 
@@ -14,7 +14,7 @@ class ActionsTable extends Table
     public function created()
     {
         $this->triggerId = $this->prop('trigger_id');
-        $this->trigger = TriggerModel::findOrFail($this->triggerId);
+        $this->trigger = TriggerSetupModel::findOrFail($this->triggerId);
     }
 
     public function top()
@@ -36,21 +36,21 @@ class ActionsTable extends Table
         ];
     }
 
-    public function render($action)
+    public function render($actionSetup)
     {
         return _TableRow(
-            _Html($action->action::getName()),
-            _Html(collect($action->action_params)->map(function ($value, $key) {
+            _Html($actionSetup->action->getName()),
+            _Html(collect($actionSetup->action_params)->map(function ($value, $key) {
                 return $key . ': ' . $value;
             })->implode('<br>')),
 
-            _Delete($action)->class('hover:text-red-600'),
-        )->selfGet('getActionForm', ['action_id' => $action->id ])->inModal();
+            _Delete($actionSetup)->class('hover:text-red-600'),
+        )->selfGet('getActionForm', ['action_id' => $actionSetup->id ])->inModal();
     }
 
-    public function getActionForm($actionId)
+    public function getActionForm($actionId = null)
     {
-        return new ActionForm($actionId, [
+        return new ActionSetupForm($actionId, [
             'trigger_id' => $this->triggerId,
         ]);
     }

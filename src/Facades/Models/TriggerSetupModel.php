@@ -5,12 +5,12 @@ namespace Condoedge\Triggerator\Facades\Models;
 use Kompo\Komponents\Form\KompoModelFacade;
 
 /**
- * @mixin \Condoedge\Triggerator\Models\Action
+ * @mixin \Condoedge\Triggerator\Models\Trigger
  */
-class ActionModel extends KompoModelFacade
+class TriggerSetupModel extends KompoModelFacade
 {
     protected static function getModelBindKey()
     {
-        return 'action-model';
+        return 'trigger-model';
     }
 }

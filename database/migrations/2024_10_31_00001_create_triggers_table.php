@@ -10,7 +10,7 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('triggers', function (Blueprint $table) {
+        Schema::create('trigger_setups', function (Blueprint $table) {
             addMetaData($table);
 
             $table->string('name');
