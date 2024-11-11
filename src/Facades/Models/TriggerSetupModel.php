@@ -5,7 +5,7 @@ namespace Condoedge\Triggerator\Facades\Models;
 use Kompo\Komponents\Form\KompoModelFacade;
 
 /**
- * @mixin \Condoedge\Triggerator\Models\Trigger
+ * @mixin \Condoedge\Triggerator\Models\TriggerSetup
  */
 class TriggerSetupModel extends KompoModelFacade
 {
