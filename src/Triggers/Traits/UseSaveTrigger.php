@@ -11,7 +11,7 @@ trait UseSaveTrigger
     {
         static::saving(function () {
             TriggerSetupModel::forTrigger(SaveTrigger::class)
-                ->whereRaw('JSON_CONTAINS(`trigger_params`,' . static::class . ', "$.model")')
+                ->whereRaw('JSON_CONTAINS(`trigger_params`, "' . static::class . '", "$.model")')
                 ->get()
                 ->each(fn($t) => SaveTrigger::launch(['trigger' => $t]));
         });
