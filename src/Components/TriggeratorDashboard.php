@@ -4,7 +4,7 @@ namespace Condoedge\Triggerator\Components;
 
 use Condoedge\Triggerator\Facades\Models\TriggerExecutionModel;
 use Condoedge\Triggerator\Facades\Models\TriggerSetupModel;
-use Kompo\Auth\Common\Form;
+use Condoedge\Utils\Kompo\Common\Form;
 
 class TriggeratorDashboard extends Form
 {

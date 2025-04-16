@@ -4,7 +4,7 @@ namespace Condoedge\Triggerator\Models;
 
 use Condoedge\Triggerator\Facades\Models\TriggerSetupModel;
 use Illuminate\Support\Facades\DB;
-use Kompo\Auth\Models\Model;
+use Condoedge\Utils\Models\Model;
 
 class TriggerExecution extends Model
 {

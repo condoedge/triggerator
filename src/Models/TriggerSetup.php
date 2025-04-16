@@ -6,7 +6,7 @@ use Condoedge\Triggerator\Facades\Models\ActionSetupModel;
 use Condoedge\Triggerator\Facades\Models\TriggerExecutionModel;
 use Condoedge\Triggerator\Jobs\ExecuteActionsJob;
 use Illuminate\Bus\Dispatcher;
-use Kompo\Auth\Models\Model;
+use Condoedge\Utils\Models\Model;
 
 class TriggerSetup extends Model {
     protected $casts = [

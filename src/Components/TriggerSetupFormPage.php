@@ -6,7 +6,7 @@ use Condoedge\Triggerator\Facades\Models\TriggerSetupModel;
 use Condoedge\Triggerator\Facades\Triggers;
 use Condoedge\Triggerator\Models\TriggerSetup;
 use Illuminate\Support\Facades\Validator;
-use Kompo\Auth\Common\Form;
+use Condoedge\Utils\Kompo\Common\Form;
 use Kompo\Komponents\Form\FormDisplayer;
 
 class TriggerSetupFormPage extends Form

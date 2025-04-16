@@ -2,7 +2,7 @@
 namespace Condoedge\Triggerator\Components;
 
 use Condoedge\Triggerator\Facades\Models\TriggerSetupModel;
-use Kompo\Auth\Common\Table;
+use Condoedge\Utils\Kompo\Common\Table;
 
 class ActionSetupsTable extends Table
 {

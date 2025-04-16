@@ -5,7 +5,7 @@ use Condoedge\Triggerator\Facades\Models\ActionSetupModel;
 use Condoedge\Triggerator\Facades\Models\TriggerSetupModel;
 use Condoedge\Triggerator\Facades\Triggers;
 use Illuminate\Support\Facades\Validator;
-use Kompo\Auth\Common\Modal;
+use Condoedge\Utils\Kompo\Common\Modal;
 
 class ActionSetupForm extends Modal
 {

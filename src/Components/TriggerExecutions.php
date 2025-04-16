@@ -4,7 +4,7 @@ namespace Condoedge\Triggerator\Components;
 
 use Condoedge\Triggerator\Facades\Models\TriggerExecutionModel;
 use Condoedge\Triggerator\Models\ExecutionStatusEnum;
-use Kompo\Auth\Common\Table;
+use Condoedge\Utils\Kompo\Common\Table;
 
 class TriggerExecutions extends Table
 {

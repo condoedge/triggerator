@@ -4,7 +4,7 @@ namespace Condoedge\Triggerator\Models;
 
 use Condoedge\Triggerator\Actions\Contract\ActionContract;
 use Condoedge\Triggerator\Facades\Models\TriggerSetupModel;
-use Kompo\Auth\Models\Model;
+use Condoedge\Utils\Models\Model;
 
 class ActionSetup extends Model
 {

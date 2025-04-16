@@ -2,7 +2,7 @@
 
 namespace Condoedge\Triggerator\Components;
 
-use Kompo\Auth\Common\Form;
+use Condoedge\Utils\Kompo\Common\Form;
 
 class TriggeratorMainPage extends Form
 {
