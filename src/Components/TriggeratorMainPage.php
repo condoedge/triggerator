@@ -8,7 +8,7 @@ class TriggeratorMainPage extends Form
 {
     public function render()
     {
-        return _ResponsiveTabs([
+        return _ResponsiveTabs(
             _Tab(
                 new TriggeratorDashboard()
             )->label('triggerator.main-page'),
@@ -18,6 +18,7 @@ class TriggeratorMainPage extends Form
             _Tab(
                 new TriggerExecutions()
             )->label('triggerator.trigger-executions'),
-        ], tabsCommonClass: 'mb-4 mr-6 ', tabsSelectedClass: 'border-b-2 pb-2 border-level1 font-semibold');
+        )->tabsCommonClass('mb-4 mr-6 ')
+        ->tabsSelectedClass('border-b-2 pb-2 border-level1 font-semibold');
     }    
 }
