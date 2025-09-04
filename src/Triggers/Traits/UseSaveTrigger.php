@@ -9,11 +9,8 @@ trait UseSaveTrigger
 {
     public static function booted()
     {
-        static::saving(function () {
-            TriggerSetupModel::forTrigger(SaveTrigger::class)
-                ->whereRaw("JSON_EXTRACT(trigger_params, '$.model') = '" . json_encode(static::class) . "'")
-                ->get()
-                ->each(fn($t) => SaveTrigger::launch(['trigger' => $t]));
+        static::saving(function ($model) {
+            event(new \Condoedge\Triggerator\Events\ModelSaved($model));
         });
     }
 }

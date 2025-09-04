@@ -2,6 +2,7 @@
 
 namespace Condoedge\Triggerator\Triggers\Usable;
 
+use Condoedge\Triggerator\Events\WebhookReceived;
 use Condoedge\Triggerator\Models\TriggerSetup;
 use Condoedge\Triggerator\Triggers\AbstractSetupModelTrigger;
 use Illuminate\Http\Request;
@@ -47,15 +48,15 @@ class WebhookTrigger extends AbstractSetupModelTrigger
     static function setListenerRoutes()
     {
         if (Schema::hasTable('trigger_setups')) {
-            $triggers = TriggerSetup::getForType(WebhookTrigger::class);
-        
+            $triggers = TriggerSetup::getForTypeCached(WebhookTrigger::class);
+
             $triggers->each(function ($trigger) {
                 $route = $trigger->trigger_params->route;
                 $method = $trigger->trigger_params->method;
         
-                Route::{$method}($route, function (Request $request) use ($trigger) {
+                Route::{$method}($route, function (Request $request) use ($trigger, $route, $method) {
                     try{
-                        WebhookTrigger::launch(array_merge($request->all(), ['trigger' => $trigger]));
+                        event(new WebhookReceived($request->all(), $route, $method));
                     } catch (\Exception $e) {
                         return response()->json(['message' => $e->getMessage()], 500);
                     }
@@ -64,5 +65,40 @@ class WebhookTrigger extends AbstractSetupModelTrigger
                 });
             });
         }
+    }
+
+    public static function getListeningEvent(): ?string
+    {
+        return WebhookReceived::class;
+    }
+
+    public static function shouldExecuteForEvent($event, $triggerParams): bool
+    {
+        if (!$event instanceof \Condoedge\Triggerator\Events\WebhookReceived) {
+            return false;
+        }
+
+        // Check if this trigger is configured for this route/method
+        $configuredRoute = $triggerParams->route ?? null;
+        $configuredMethod = $triggerParams->method ?? 'GET';
+
+        // Match route (if configured) and method
+        return (!$configuredRoute || $event->route === $configuredRoute) 
+            && $event->method === $configuredMethod;
+    }
+
+    public static function filterTriggersForEvent($event, $query)
+    {
+        if (!$event instanceof \Condoedge\Triggerator\Events\WebhookReceived) {
+            return $query->whereRaw('1 = 0'); // No results
+        }
+
+        $query = $query->whereRaw("JSON_EXTRACT(trigger_params, '$.method') = ?", [json_encode($event->method)]);
+
+        if ($event->route) {
+            $query = $query->whereRaw("JSON_EXTRACT(trigger_params, '$.route') = ?", [json_encode($event->route)]);
+        }
+
+        return $query;
     }
 }

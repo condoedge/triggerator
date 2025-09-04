@@ -1,6 +1,7 @@
 <?php
 namespace Condoedge\Triggerator\Triggers\Usable;
 
+use Condoedge\Triggerator\Events\DateTriggered;
 use Condoedge\Triggerator\Triggers\AbstractSetupModelTrigger;
 
 class DateTrigger extends AbstractSetupModelTrigger
@@ -26,7 +27,7 @@ class DateTrigger extends AbstractSetupModelTrigger
 
         $triggerModel->executions()->pending()->delete();
 
-        static::launch(['trigger' => $triggerModel]);
+        event(new DateTriggered($triggerModel->trigger_params->date, $triggerModel->id));
     }
 
     static function getName()
@@ -39,5 +40,25 @@ class DateTrigger extends AbstractSetupModelTrigger
         return [
             'date' => 'required|date|after:today',
         ];
+    }
+
+    public static function getListeningEvent(): ?string
+    {
+        return DateTriggered::class;
+    }
+
+    public static function filterTriggersForEvent($event, $query)
+    {
+        if (!$event instanceof \Condoedge\Triggerator\Events\DateTriggered) {
+            return $query->whereRaw('1 = 0'); // No results
+        }
+
+        // If event has a specific trigger ID, filter by it
+        if ($event->triggerId) {
+            return $query->where('id', $event->triggerId);
+        }
+
+        // Otherwise filter by date
+        return $query->whereRaw("JSON_EXTRACT(trigger_params, '$.date') = ?", [json_encode($event->date)]);
     }
 }

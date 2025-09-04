@@ -41,7 +41,7 @@ class TriggeratorServiceProvider extends ServiceProvider
 
         $this->loadConfig();
 
-        $this->loadListeners();
+        Triggers::loadEventListeners();
 
         $this->loadCrons();
 
@@ -111,8 +111,4 @@ class TriggeratorServiceProvider extends ServiceProvider
         $schedule = $this->app->make(Schedule::class);
     }
 
-    protected function loadListeners()
-    {
-        
-    }
 }

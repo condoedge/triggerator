@@ -54,4 +54,19 @@ abstract class AbstractSetupModelTrigger implements TriggerContract
     {
         return Actions::getActions();
     }
+
+    public static function getListeningEvent(): ?string
+    {
+        return null;
+    }
+
+    public static function shouldExecuteForEvent($event, $triggerParams): bool
+    {
+        return true;
+    }
+
+    public static function filterTriggersForEvent($event, $query)
+    {
+        return $query;
+    }
 }

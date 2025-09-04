@@ -59,7 +59,7 @@ class TriggerSetupFormPage extends Form
                 _SubmitButton('generic.save'),
             )->class('mb-2'),
 
-            _Input('triggerator.name')->name('name')->class('mb-4'),
+            _Input('triggerator.name')->name('name')->required()->class('mb-4'),
 
             _Columns(
                 _Rows(

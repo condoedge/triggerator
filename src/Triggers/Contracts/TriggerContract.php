@@ -16,4 +16,11 @@ interface TriggerContract
     public static function integrityValidators();
 
     public static function afterSetup(array $params);
+
+    // EVENT INTEGRATION
+    public static function getListeningEvent(): ?string;
+
+    public static function shouldExecuteForEvent($event, $triggerParams): bool;
+
+    public static function filterTriggersForEvent($event, $query);
 }
